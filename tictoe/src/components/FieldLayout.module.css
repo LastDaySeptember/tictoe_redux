@@ -1,0 +1,32 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  background-color: rgba(219, 219, 219, 0.062);
+  width: 400px;
+  height: 400px;
+  margin: 10 auto;
+}
+
+.cell {
+  border: 1px solid rgb(61, 61, 61);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  cursor: pointer;
+  color: antiquewhite;
+}
+
+.cell:hover {
+  background-color: rgba(142, 148, 150, 0.062);
+}
+
+.active {
+}
+
+.disabled {
+  cursor: not-allowed;
+  background-color: rgba(165, 123, 123, 0.158);
+}
