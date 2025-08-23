@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AppLayout } from "./AppLayout.jsx";
+import PropTypes from "prop-types";
 
 export function App() {
   const [currentPlayer, setCurrentPlayer] = useState("x");
