@@ -3,12 +3,12 @@ import { AppLayout } from "./AppLayout.jsx";
 import PropTypes from "prop-types";
 
 export function App() {
-  const [currentPlayer, setCurrentPlayer] = useState("x");
-  const [isGameEnded, setIsGameEnded] = useState(false);
-  const [isDraw, setIsDraw] = useState(false);
-  const [field, setField] = useState(["", "", "", "", "", "", "", "", ""]);
-  const [winner, setWinner] = useState(null);
-  const [isActive, setIsActive] = useState(true);
+  // const [currentPlayer, setCurrentPlayer] = useState("x");
+  // const [isGameEnded, setIsGameEnded] = useState(false);
+  // const [isDraw, setIsDraw] = useState(false);
+  // const [field, setField] = useState(["", "", "", "", "", "", "", "", ""]);
+  // const [winner, setWinner] = useState(null);
+  // const [isActive, setIsActive] = useState(true);
   const winPatterns = [
     [0, 1, 2], // верхняя горизонталь
     [3, 4, 5], // средняя горизонталь
