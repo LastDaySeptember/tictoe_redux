@@ -1,25 +1,17 @@
 import styles from "./InformationLayout.module.css";
 import PropTypes from "prop-types";
+import { store } from "../store.js";
 
-export function InformationLayout({
-  field,
-  setField,
-  currentPlayer,
-  setCurrentPlayer,
-  isGameEnded,
-  setIsGameEnded,
-  isDraw,
-  setIsDraw,
-  winner,
-  setWinner,
-}) {
+export function InformationLayout() {
+  const appState = store.getState();
+
   let infoText = "";
-  if (!isGameEnded) {
-    infoText = `Current Player : ${currentPlayer}`;
-  } else if (isDraw) {
+  if (!appState.isGameEnded) {
+    infoText = `Current Player : ${appState.currentPlayer}`;
+  } else if (appState.isDraw) {
     infoText = `Draw!`;
   } else {
-    infoText = `${winner} wins!`;
+    infoText = `${appState.winner} wins!`;
   }
 
   return (

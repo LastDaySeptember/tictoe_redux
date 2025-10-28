@@ -1,28 +1,10 @@
-import { useState } from "react";
 import { InformationLayout } from "./InformationLayout";
 import PropTypes from "prop-types";
 
-export function Information({
-  field,
-  setField,
-  currentPlayer,
-  setCurrentPlayer,
-  isGameEnded,
-  setIsGameEnded,
-  isDraw,
-  setIsDraw,
-  winner,
-  setWinner,
-}) {
+export function Information() {
   return (
     <>
-      <InformationLayout
-        currentPlayer={currentPlayer}
-        isGameEnded={isGameEnded}
-        isDraw={isDraw}
-        winner={winner}
-        setWinner={setWinner}
-      />
+      <InformationLayout />
     </>
   );
 }

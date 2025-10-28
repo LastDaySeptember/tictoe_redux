@@ -1,42 +1,60 @@
-import { useState } from "react";
 import { FieldLayout } from "./FieldLayout";
 import PropTypes from "prop-types";
+import { store } from "../store.js";
+import {
+  SET_CURRENT_PLAYER,
+  END_GAME,
+  SET_DRAW,
+  UPDATE_FIELD,
+  SET_WINNER,
+  SET_GAME_ACTIVE,
+} from "../constants.js";
 
-export function Field({
-  field,
-  setField,
-  currentPlayer,
-  setCurrentPlayer,
-  isGameEnded,
-  setIsGameEnded,
-  isDraw,
-  setIsDraw,
-  winPatterns,
-  winner,
-  setWinner,
-  isActive,
-  setIsActive,
-}) {
+const winPatterns = [
+  [0, 1, 2], // верхняя горизонталь
+  [3, 4, 5], // средняя горизонталь
+  [6, 7, 8], // нижняя горизонталь
+  [0, 3, 6], // левая вертикаль
+  [1, 4, 7], // средняя вертикаль
+  [2, 5, 8], // правая вертикаль
+  [0, 4, 8], // диагональ \
+  [2, 4, 6], // диагональ /
+];
+
+export function Field() {
   // FUNCTIONS
 
-  function compareArray(array1, array2) {
-    const isLengthEqual = array1.length === array2.length;
-    if (!isLengthEqual) {
-      return false;
-    }
-    let sortedArray1 = [...array1].sort();
-    let sortedArray2 = [...array2].sort();
+  function containsArray(baseArray, arrayToCheck) {
+    if (arrayToCheck.length < 3) return false;
 
-    for (let i = 0; i < sortedArray1.length; i++) {
-      if (sortedArray1[i] !== sortedArray2[i]) {
+    for (let i = 0; i < 3; i++) {
+      if (!arrayToCheck.includes(baseArray[i])) {
         return false;
       }
     }
+
     return true;
   }
 
+  // function compareArray(array1, array2) {
+  //   let sortedArray1 = [...array1].sort();
+  //   let sortedArray2 = [...array2].sort();
+  //   console.log("sorting array", sortedArray1, sortedArray2);
+
+  //   for (let i = 0; i < sortedArray1.length; i++) {
+  //     console.log(i, " ", sortedArray1[i], " ", sortedArray2[i]);
+  //     if (sortedArray1[i] !== sortedArray2[i]) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+
   // F win ior draw
   function checkWinDraw(updatedField) {
+    const appState = store.getState();
+    const currentPlayer = appState.currentPlayer;
+
     const currentPattern = [];
     updatedField.forEach((cell, i) => {
       if (cell === currentPlayer) {
@@ -45,45 +63,50 @@ export function Field({
     });
 
     winPatterns.forEach((pattern) => {
-      if (compareArray(pattern, currentPattern)) {
-        setIsGameEnded(true);
-        setWinner(currentPlayer);
-        setIsActive(false);
+      if (containsArray(pattern, currentPattern)) {
+        store.dispatch({ type: END_GAME });
+        store.dispatch({ type: SET_WINNER, payload: currentPlayer });
+        store.dispatch({ type: SET_GAME_ACTIVE, payload: false });
         return true;
       } else {
         console.log("No matches found");
       }
     });
 
-    if (!isGameEnded && currentPattern.length >= 5) {
-      setIsDraw(true);
-      setIsActive(false);
-      setIsGameEnded(true);
+    if (!appState.isGameEnded && currentPattern.length >= 5) {
+      store.dispatch({ type: END_GAME });
+      store.dispatch({ type: SET_DRAW });
+      store.dispatch({ type: SET_GAME_ACTIVE, payload: false });
       return true;
     }
   }
 
   //  F change Player
   function changecurrentPlayer() {
-    setCurrentPlayer(currentPlayer === "x" ? "o" : "x");
+    const appState = store.getState();
+    const currentPlayer = appState.currentPlayer;
+    const otherPlayer = currentPlayer === "x" ? "o" : "x";
+
+    store.dispatch({ type: SET_CURRENT_PLAYER, payload: otherPlayer });
   }
 
   // F = onClick
   function onClick(index) {
-    if (isGameEnded) {
+    const appState = store.getState();
+    if (appState.isGameEnded) {
       return;
     }
-    if (field[index]) {
+    if (appState.field[index]) {
       console.log("Already filled");
       return;
     }
 
-    const updatedField = field.map((cell, i) => {
-      let cellState = i === index ? currentPlayer : cell;
+    const updatedField = appState.field.map((cell, i) => {
+      let cellState = i === index ? appState.currentPlayer : cell;
       return cellState;
     });
-    console.log("Here", field);
-    setField(updatedField);
+    console.log("Here", appState.field);
+    store.dispatch({ type: UPDATE_FIELD, payload: updatedField });
     checkWinDraw(updatedField);
     changecurrentPlayer();
   }
@@ -91,21 +114,7 @@ export function Field({
   // RETURN
   return (
     <>
-      <FieldLayout
-        currentPlayer={currentPlayer}
-        setCurrentPlayer={setCurrentPlayer}
-        isGameEnded={isGameEnded}
-        setIsGameEnded={setIsGameEnded}
-        isDraw={isDraw}
-        setIsDraw={setIsDraw}
-        field={field}
-        setField={setField}
-        onClick={onClick}
-        winner={winner}
-        setWinner={setWinner}
-        isActive={isActive}
-        setIsActive={setIsActive}
-      />
+      <FieldLayout onClick={onClick} />
     </>
   );
 }

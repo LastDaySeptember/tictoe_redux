@@ -1,25 +1,16 @@
 import styles from "./FieldLayout.module.css";
 import PropTypes from "prop-types";
+import { store } from "../store.js";
 
-export function FieldLayout({
-  field,
-  setField,
-  currentPlayer,
-  setCurrentPlayer,
-  isGameEnded,
-  setIsGameEnded,
-  isDraw,
-  setIsDraw,
-  onClick,
-  isActive,
-  setIsActive,
-}) {
-  const containerState = isActive ? "active" : "disabled";
+export function FieldLayout({ onClick }) {
+  const appState = store.getState();
+
+  const containerState = appState.isActive ? "active" : "disabled";
 
   return (
     <>
       <div className={`${styles["container"]} ${styles[containerState]}`}>
-        {field.map((cell, index) => {
+        {appState.field.map((cell, index) => {
           return (
             <div
               key={index}

@@ -1,30 +1,12 @@
 import styles from "./Button.module.css";
 import PropTypes from "prop-types";
+import { store } from "../store.js";
+import { RESET_GAME } from "../constants.js";
 
-export function Button({
-  field,
-  setField,
-  currentPlayer,
-  setCurrentPlayer,
-  isGameEnded,
-  setIsGameEnded,
-  isDraw,
-  setIsDraw,
-  winPatterns,
-  winner,
-  setWinner,
-  children,
-  setIsActive,
-  isActive,
-}) {
+export function Button({ children }) {
   function resetGame() {
     console.log("Resetted game");
-    setCurrentPlayer("x");
-    setIsGameEnded(false);
-    setIsDraw(false);
-    setField(["", "", "", "", "", "", "", "", ""]);
-    setWinner(null);
-    setIsActive(true);
+    store.dispatch({ type: RESET_GAME });
   }
 
   return (

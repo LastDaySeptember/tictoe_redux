@@ -23,6 +23,7 @@ import {
   UPDATE_FIELD,
   SET_WINNER,
   SET_GAME_ACTIVE,
+  RESET_GAME,
 } from "./constants.js";
 
 const initialState = {
@@ -58,6 +59,16 @@ export const reducer = (state = initialState, action) => {
     }
     case SET_GAME_ACTIVE: {
       return { ...state, isActive: payload };
+    }
+    case RESET_GAME: {
+      return {
+        currentPlayer: "x",
+        isGameEnded: false,
+        isDraw: false,
+        field: ["", "", "", "", "", "", "", "", ""],
+        winner: null,
+        isActive: true,
+      };
     }
     default: {
       return state;
